@@ -64,3 +64,5 @@ de restricciones y normas para que sean casos de usuarios reales:
 * Deuda: La mayoría de los usuarios no tienen una deuda (70%), pero el resto (30%) tienen una deuda de entre 200 y 1500€ mensuales. Como deuda, se cuentan una hipoteca, un préstamo personal…
 * Para el resto de campos necesarios para el algoritmo, se han generado valores aleatorios para todos ellos, ya que estos no son los que generar casos imposibles, y un usuario con cualquier valor de estos campos puede ser real.
 
+Este sistema se ha llevado a cabo en el archivo *'generate_users.py'*. Tras ejecutarlo, creará el archivo *'/data/users_dataset.csv'*. Para asignar a cada usuario su risk_rating y analizar la cantidad de usuarios
+que se han asignado a cada valor de este perfil de riesgo, hay que ejecutar *'clean_users.py'*.
