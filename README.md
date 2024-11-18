@@ -23,36 +23,36 @@ Una vez descargados, ya es posible ejecutar los scripts desde la carpeta /script
 
 ### ETF
 
-Primero, es necesario limpiar el dataset de ETF, ya que este nos servirá de referencia los demas datasets. Primero se ejecuta 'clean_etf.py', el cual realizará
-la limpieza inicial de los datos. Después, se debe ejecuta 'procesar_etf.py', el cual principalmente tiene como objetivo entrenar el algoritmo RandomForestRegressor
+Primero, es necesario limpiar el dataset de ETF, ya que este nos servirá de referencia los demas datasets. Primero se ejecuta *'clean_etf.py'*, el cual realizará
+la limpieza inicial de los datos. Después, se debe ejecuta *'procesar_etf.py'*, el cual principalmente tiene como objetivo entrenar el algoritmo RandomForestRegressor
 para, dados los valores sin ningun campo nulo, pueda rellenar de la forma más precisa posible los campos nulos tanto de risk_rating como de performance_rating. 
 
 El campo de risk_rating es especialmente importante, ya que este campo es el que relaciona el perfil de riesgo del usuario con el nivel de riesgo del fondo. Por otro lado,
 performance_rating tiene exactamente el mismo número de valores nulos que risk_rating, y por lo tanto son las mismas filas las que se ven afectadas por esto, y se puede hacer
 lo mismo con este campo sin ningun paso adicional, tan solo entrenar de nuevo otro algoritmo RandomForestRegressor.
 
-Una vez ejecutados estos dos scripts, nos dejará el archivo final 'eu_etf_dataset_predict.csv', con los datos ya completamente procesados, bajo la carpeta /cleandata.
+Una vez ejecutados estos dos scripts, nos dejará el archivo final *'eu_etf_dataset_predict.csv'*, con los datos ya completamente procesados, bajo la carpeta /cleandata.
 
 ### Crypto
 
-Para la limpieza de los datos de criptomonedas, tan solo es necesario ejecutar el archivo 'clean_crypto.py', ya que el risk_rating de este dataset será de 5 para todas y no necesita de
+Para la limpieza de los datos de criptomonedas, tan solo es necesario ejecutar el archivo *'clean_crypto.py'*, ya que el risk_rating de este dataset será de 5 para todas y no necesita de
 procesamiento adicional. Este script además agrupará los datos de manera semanal en vez de diaria, para de esta forma reducir el volumen de datos significativamente
-sin perder prácticamente nada de información. Esto nos dejará el archivo '__combined_crypto_data.csv'.
+sin perder prácticamente nada de información. Esto nos dejará el archivo *'__combined_crypto_data.csv'*.
 
 ### S&P 500
 
-Para el dataset del sp500, es necesario ejecutar 'clean_sp500.py', el cual realizará la limpieza inicial de estos datos y agrupandolos semanalmente también. 
-Después, se debe ejecuta 'sp500_risk_rating.py', el cual, basándose en el risk_rating de los ETFs, calculará un risk_rating para cada acción según el rendimiento
+Para el dataset del sp500, es necesario ejecutar *'clean_sp500.py'*, el cual realizará la limpieza inicial de estos datos y agrupandolos semanalmente también. 
+Después, se debe ejecuta *'sp500_risk_rating.py'*, el cual, basándose en el risk_rating de los ETFs, calculará un risk_rating para cada acción según el rendimiento
 que haya tenido cada acción, buscando similitudes con el rendimiento del ETF y su risk_rating.
 
-Una vez ejecutados estos dos scripts, nos dejará el archivo final 'sp500riskrating.csv', con los datos ya completamente procesados, también bajo la carpeta /cleandata.
+Una vez ejecutados estos dos scripts, nos dejará el archivo final *'sp500riskrating.csv'*, con los datos ya completamente procesados, también bajo la carpeta /cleandata.
 
 ## Desarrollo del algoritmo de perfil de riesgo 
 
 Este algoritmo ha sido implementado teniendo en cuenta valores muy importantes como la edad, ingresos mensuales, gastos, deuda, objetivo finanicero, horizonte de inversión, tolerancia al riesgo...
 Hace un recuento de la puntuación final según la respuesta a cada una de las preguntas sobre los campos importantes, y según esta puntuación se le asigna al usuario un valor del 1 al 5, 
 tal como están valorados todos los tipos de inversión. Para poder acceder a una prueba de este algoritmo, tan solo es necesario descomentar las últimas lineas del archivo ubicado en
-'/scripts/user_risk_rating.py' y ejecutarlo.
+*'/scripts/user_risk_rating.py'* y ejecutarlo.
 
 Ahora, es posible generar un dataset de usuarios, cubriendo todos los posibles casos de usuarios. Este dataset se ha generado de manera automática, de un total de 2000 usuarios, siguiendo una serie
 de restricciones y normas para que sean casos de usuarios reales:
