@@ -1,0 +1,10 @@
+Para ejecutar los scripts de limpieza de datos, es necesario descargar los archivos debido a que su peso es demasiado grande:
+
+crypto W1: https://www.kaggle.com/datasets/olegshpagin/crypto-coins-prices-ohlcv?select=W1
+Descargar el comprimido y descomprimirlo en la carpeta crypto W1.
+
+eu etf: https://www.kaggle.com/datasets/stefanoleone992/european-funds-dataset-from-morningstar?select=Morningstar+-+European+ETFs.csv
+Descargar el archivo y colocarlo en la carpeta eu etf.
+
+sp500: https://www.kaggle.com/datasets/andrewmvd/sp-500-stocks?select=sp500_stocks.csv
+Descargar el archivo y colocarlo en la carpeta sp500.
