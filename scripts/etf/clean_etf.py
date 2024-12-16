@@ -43,6 +43,9 @@ print(df.isnull().sum())
 # y no para el resto, que son de acumulacion.
 df['dividend_frequency'].fillna('Acc', inplace=True)
 
+# Como medida adicional, para asegurarse de que el campo es correcto, para reemplazar 'Acc' por 'Dist' si el nombre contiene 'Dist'
+df.loc[(df['fund_name'].str.contains('Dist')) | (df['fund_name'].str.endswith(' D')), 'dividend_frequency'] = 'Dist'
+
 # Eliminar las filas con valores nulos en los campos clave que no pueden ser nulos
 df = df.dropna(subset=['nav_per_share', 'management_fees', 'ongoing_cost', 'fund_trailing_return_ytd'])  
 

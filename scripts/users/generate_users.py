@@ -28,13 +28,12 @@ ahorro = generar_gastos(ingresos)
 
 data = {
     'edad': np.random.randint(18, 70, n_users),  # Edad entre 18 y 70 años
-    'ingresos_mensuales': ingresos,
-    'ahorro_mensual': ahorro,
-    'deudas_mensuales': np.random.choice(
+    'ingresos_mensuales': np.round(ingresos, 2),
+    'ahorro_mensual': np.round(ahorro, 2),
+    'deudas_mensuales': np.round(np.random.choice(
         np.append(np.zeros(int(n_users * 0.7)),  # 70% sin deudas
                   np.random.uniform(200, 1500, int(n_users * 0.3))),  # 30% con deudas de tipo hipoteca, etc.
-        n_users
-    ),
+        n_users), 2),
     'horizonte_inversion': np.random.choice(['corto plazo', 'medio plazo', 'largo plazo'], n_users),
     'objetivo_financiero': np.random.choice([1, 2, 3], n_users),  # Objetivo financiero (1, 2, o 3)
     'tolerancia_riesgo': np.random.choice([1, 2, 3], n_users),  # Tolerancia al riesgo (1, 2, o 3)
@@ -44,4 +43,11 @@ data = {
 }
 
 df_usuarios = pd.DataFrame(data)
+
+# Ajustar horizonte de inversión según edad
+df_usuarios.loc[df_usuarios['edad'] >= 50, 'horizonte_inversion'] = df_usuarios.loc[
+    df_usuarios['edad'] >= 50, 'horizonte_inversion'].replace('largo plazo', 'medio plazo')
+df_usuarios.loc[df_usuarios['edad'] >= 60, 'horizonte_inversion'] = df_usuarios.loc[
+    df_usuarios['edad'] >= 60, 'horizonte_inversion'].replace('medio plazo', 'corto plazo')
+
 df_usuarios.to_csv('../data/users_dataset.csv', index=False)

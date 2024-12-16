@@ -45,8 +45,12 @@ X_train_risk, X_test_risk, y_train_risk, y_test_risk = train_test_split(X_risk, 
 risk_model = RandomForestRegressor(random_state=42)
 risk_model.fit(X_train_risk, y_train_risk)
 
+def round_to_valid_rating(predictions):
+    valid_ratings = [1.0, 2.0, 3.0, 4.0, 5.0]
+    return [min(valid_ratings, key=lambda x: abs(x - pred)) for pred in predictions]
+
 # Predicción de valores faltantes en 'risk_rating'
-predicted_risk = risk_model.predict(X_predict_risk)
+predicted_risk = round_to_valid_rating(risk_model.predict(X_predict_risk))
 data_cleaned.loc[data_cleaned['risk_rating'].isnull(), 'risk_rating'] = predicted_risk
 
 # Repetir el proceso para 'performance_rating'
@@ -62,7 +66,7 @@ X_train_performance, X_test_performance, y_train_performance, y_test_performance
 performance_model = RandomForestRegressor(random_state=42)
 performance_model.fit(X_train_performance, y_train_performance)
 
-predicted_performance = performance_model.predict(X_predict_performance)
+predicted_performance = round_to_valid_rating(performance_model.predict(X_predict_performance))
 data_cleaned.loc[data_cleaned['performance_rating'].isnull(), 'performance_rating'] = predicted_performance
 
 # Ahora 'data_cleaned' tiene valores estimados en 'risk_rating' y 'performance_rating'
