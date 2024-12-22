@@ -163,31 +163,40 @@ def generar_pregunta(inversion1, inversion2):
 def combinar_comparaciones_jsonl(etf_data, stock_data, crypto_data, output_path):
     dataset_combinado = []
 
+    # Instrucción del sistema común
+    system_message = (
+        "Eres un asistente financiero personal especializado en inversiones. "
+        "Tu objetivo es ayudar a los usuarios con cualquier tema relacionado con inversiones, finanzas o economía. "
+        "Para cada respuesta:\n1. Primero, busca los datos adecuados de tus conocimientos aprendidos o de las bases de datos externas disponibles.\n"
+        "2. Luego, analiza cuidadosamente la consulta para dar una respuesta clara, precisa y personalizada.\n"
+        "3. Mantente amable, profesional y enfocado únicamente en temas relacionados con inversiones, finanzas y economía."
+    )
+
     # Procesar ETFs
     for _, row in etf_data.iterrows():
         pregunta = generar_pregunta(row["inversion1"], row["inversion2"])
         dataset_combinado.append({
-            "tipo_activo": "ETF",
-            "pregunta": pregunta,
-            "respuesta": row["explicacion"]
+            "<|system|>": system_message,
+            "<|user|>": pregunta,
+            "<|assistant|>": row["explicacion"]
         })
 
     # Procesar acciones
     for _, row in stock_data.iterrows():
         pregunta = generar_pregunta(row["inversion1"], row["inversion2"])
         dataset_combinado.append({
-            "tipo_activo": "Acción",
-            "pregunta": pregunta,
-            "respuesta": row["explicacion"]
+            "<|system|>": system_message,
+            "<|user|>": pregunta,
+            "<|assistant|>": row["explicacion"]
         })
 
     # Procesar criptomonedas
     for _, row in crypto_data.iterrows():
         pregunta = generar_pregunta(row["inversion1"], row["inversion2"])
         dataset_combinado.append({
-            "tipo_activo": "Criptomoneda",
-            "pregunta": pregunta,
-            "respuesta": row["explicacion"]
+            "<|system|>": system_message,
+            "<|user|>": pregunta,
+            "<|assistant|>": row["explicacion"]
         })
 
     # Guardar como JSONL

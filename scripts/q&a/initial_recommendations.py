@@ -178,38 +178,56 @@ def calcular_ratios_para_hash(datos_usuario):
 
 
 
+import pandas as pd
+import json
+
 def generar_dataset_sin_redundancia(users_data, etfs, criptos, acciones, cuentas_ahorro, output_path):
     rows = []
     usuarios_procesados = set()  # Para rastrear usuarios únicos basados en sus datos
 
+    # Mensaje del sistema constante
+    system_message = (
+        "Eres un asistente financiero personal especializado en inversiones. "
+        "Tu objetivo es ayudar a los usuarios a tomar decisiones financieras informadas. "
+        "Primero, analiza el perfil del usuario y luego recomienda opciones de inversión precisas, claras y adaptadas a sus necesidades. "
+        "Sé amable, profesional y enfocado únicamente en temas de inversión, finanzas y economía."
+    )
+
     for _, usuario in users_data.iterrows():
+        # Calcular ratios
         ascore, dscore = calcular_ratios_para_hash(usuario)
         usuario_modificado = usuario.copy()
         usuario_modificado['ahorro_ratio'] = ascore
         usuario_modificado['deuda_ratio'] = dscore
         usuario_modificado.drop(['ingresos_mensuales', 'ahorro_mensual', 'deudas_mensuales'], inplace=True)
 
-        # Convertir el perfil de usuario modificado a un formato hashable para verificar duplicados
+        # Convertir el perfil de usuario modificado a un formato hashable
         usuario_hash = tuple(usuario_modificado.items())
 
         if usuario_hash in usuarios_procesados:
-            continue
+            continue  # Evitar duplicados
 
         # Marcar el usuario como procesado
         usuarios_procesados.add(usuario_hash)
 
         # Generar pregunta y respuesta
-        question = json.dumps({"user_profile": usuario.to_dict()})
-        answer = "\n".join(generar_recomendaciones(usuario, etfs, criptos, acciones, cuentas_ahorro))
-        rows.append({"question": question, "answer": answer})
+        user_profile = json.dumps({"user_profile": usuario.to_dict()}, ensure_ascii=False)
+        recomendaciones = "\n".join(generar_recomendaciones(usuario, etfs, criptos, acciones, cuentas_ahorro))
 
+        # Agregar en el formato deseado
+        rows.append({
+            "<|system|>": system_message,
+            "<|user|>": user_profile,
+            "<|assistant|>": recomendaciones
+        })
+
+    # Guardar el dataset en formato JSONL
     with open(output_path, "w", encoding="utf-8") as f:
         for entry in rows:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
     print(f"Dataset reducido guardado en formato JSONL en {output_path}")
     return rows
-
 
 
 # Cargar los datasets y agrupar
@@ -222,5 +240,5 @@ cuentas_ahorro = pd.read_csv('../cleandata/extraData/cuentas_ahorro.csv')
 etfs_agrupados, acciones_agrupadas, criptos_agrupados = agrupar_datos(etf_data, stocks_data, crypto_data)
 
 # Crear y guardar el dataset final
-output_csv_path = "../cleandata/q&a/recomendaciones_iniciales.jsonl"
-dataset_reducido = generar_dataset_sin_redundancia(users_data, etfs_agrupados, criptos_agrupados, acciones_agrupadas, cuentas_ahorro, output_csv_path)
+output_jsonl_path = "../cleandata/q&a/recomendaciones_iniciales.jsonl"
+dataset_reducido = generar_dataset_sin_redundancia(users_data, etfs_agrupados, criptos_agrupados, acciones_agrupadas, cuentas_ahorro, output_jsonl_path)

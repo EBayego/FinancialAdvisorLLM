@@ -108,7 +108,13 @@ def generar_dataset_conversacional(data, name_field, comparar_funcion, n_combina
         data2 = data[data[name_field] == inv2].iloc[0]
         pregunta = generar_pregunta(inv1, inv2)
         respuesta = comparar_funcion(inv1, inv2, data1, data2)
-        preguntas_respuestas.append({"pregunta": pregunta, "respuesta": respuesta})
+        
+        # Formato correcto
+        preguntas_respuestas.append({
+            "<|system|>": "Eres un asistente financiero personal especializado en inversiones. Tu objetivo es ayudar a los usuarios con cualquier tema relacionado con inversiones, finanzas o economía. Para cada respuesta:\n1. Primero, busca los datos adecuados de tus conocimientos aprendidos o de las bases de datos externas disponibles.\n2. Luego, analiza cuidadosamente la consulta para dar una respuesta clara, precisa y personalizada.\n3. Mantente amable, profesional y enfocado únicamente en temas relacionados con inversiones, finanzas y economía.",
+            "<|user|>": pregunta,
+            "<|assistant|>": respuesta
+        })
 
     return pd.DataFrame(preguntas_respuestas)
 
@@ -121,39 +127,17 @@ dataset_stocks = generar_dataset_conversacional(stocks_data, 'Symbol', generar_r
 dataset_cryptos = generar_dataset_conversacional(crypto_data, 'crypto_name', generar_respuesta_conversacional_cryptos)
 
 def combinar_datasets(etf_data, stock_data, crypto_data):
-    dataset_combinado = []
-
-    # Procesar ETFs
-    for _, row in etf_data.iterrows():
-        dataset_combinado.append({
-            "tipo_activo": "ETF",
-            "pregunta": row["pregunta"],
-            "respuesta": row["respuesta"]
-        })
-
-    # Procesar acciones
-    for _, row in stock_data.iterrows():
-        dataset_combinado.append({
-            "tipo_activo": "Acción",
-            "pregunta": row["pregunta"],
-            "respuesta": row["respuesta"]
-        })
-
-    # Procesar criptomonedas
-    for _, row in crypto_data.iterrows():
-        dataset_combinado.append({
-            "tipo_activo": "Criptomoneda",
-            "pregunta": row["pregunta"],
-            "respuesta": row["respuesta"]
-        })
-
-    return dataset_combinado
+    return pd.concat([etf_data, stock_data, crypto_data], ignore_index=True)
 
 # Guardar como JSONL
 def guardar_jsonl(dataset, output_path):
     with open(output_path, "w", encoding="utf-8") as f:
-        for entry in dataset:
-            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        for _, row in dataset.iterrows():
+            f.write(json.dumps({
+                "<|system|>": row["<|system|>"],
+                "<|user|>": row["<|user|>"],
+                "<|assistant|>": row["<|assistant|>"]
+            }, ensure_ascii=False) + "\n")
 
 # Combinar y guardar
 dataset_combinado = combinar_datasets(dataset_etfs, dataset_stocks, dataset_cryptos)
