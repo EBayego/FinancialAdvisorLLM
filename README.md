@@ -73,3 +73,25 @@ Este algoritmo se ha implementado para poder predecir el perfil de riesgo de los
 se ha planteado crear este algoritmo para en caso de tener datos cuyo perfil de riesgo no sea calculado de esta manera, sino que venga implicito en el dataset. 
 Para ello, primero se ha transformado las variables categóricas, se ha dividido el dataset en entrenamiento y test, aplicando posteriormente el algoritmo RandomForestClassifier. Este proceso se puede replicar accediendo acceder
 *'/scripts/users/predict_user_risk_rating.py'*. Esto generará el modelo RandomForestClassifier, lo guardará, y mostrará sus métricas de rendimiento.
+
+## Desarrollo de algoritmos para generar datos en formato preguntas-respuestas
+
+Estos algoritmos se han implementado para generar generar preguntas y respuestas realistas con los datos de los dataset anteriores. Todos ellos generan dataset en un formato separado por roles, que se diferencian en 'system',
+que contiene un mensaje sobre cómo debe comportarse y cómo debe responder el modelo, 'user' que contiene la pregunta del usuario, y 'assistant' que contiene la respuesta del modelo.
+
+### Algoritmo de recomendaciones iniciales en formato preguntas-respuestas
+Este primer algoritmo consta de una pregunta la cual va acompañada de todos los datos del usuario, a raíz de los cuales el algoritmo te recomienda uno u otro, según su perfil de riesgo y su contexto personal.
+El algoritmo se encuentra en *'/scripts/q&a/initial_recommendations.py'*, y genera un archivo en *'/cleandata/q&a/recomendaciones_iniciales.jsonl'*
+
+### Algoritmo de comparaciones esquemáticas en formato preguntas-respuestas
+Este segundo algoritmo se basa en un formato esquemático, en el que la pregunta es una comparación entre dos activos, y la respuesta es la comparación de todos los campos, sean distintos o no, y explica brevemente el significado de cada campo.
+El algoritmo se encuentra en *'/scripts/q&a/compare_schema.py'*, y genera un archivo en *'/cleandata/q&a/q&a_comparaciones_esquematico.jsonl'*
+
+### Algoritmo de comparaciones conversacionales en formato preguntas-respuestas
+Este último algoritmo se realiza de manera similar, pero en vez de comparar todos los campos, tan solo muestra las diferencias entre ellos, y explica el impacto que tiene cada uno de los campos según sea mayor, menor o distinto.
+El algoritmo se encuentra en *'/scripts/q&a/compare_conv.py'*, y genera un archivo en *'/cleandata/q&a/q&a_comparaciones_conversacionales.jsonl'*
+
+## Entrenamiento del modelo Zephyr 7B Beta
+Por último, bajo la carpeta *'/scripts/finetuning/'*, encontramos dos archivos de Jupyter Notebook, los cuales contienen el código que se ha utilizado para entrenar el modelo Zephyr 7B Beta, con la diferencia de que el nombre de uno de ellos 
+contiene 'comentado', el cual, como su nombre indica, tiene tambien la explicación del código y del impacto de cada parámetro e hiperparámetro. Este archivo ha sido ejecutado en un entorno de Google Colab PRO, más concretamente utilizando el
+entorno A100 GPU. La explicación de esto, se encuentra también en el archivo comentado, por lo que es recomendable observar ese archivo primero para entender el por qué y cómo se ha realizado. 
