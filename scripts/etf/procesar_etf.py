@@ -87,6 +87,14 @@ def print_metrics(y_true, y_pred, label):
     print(f"R² (Coeficiente de Determinación): {r2:.4f}")
     print()
 
+# Calcular métricas para el modelo de 'risk_rating' en el conjunto de entrenamiento
+y_train_pred_risk = risk_model.predict(X_train_risk)
+print_metrics(y_train_risk, y_train_pred_risk, "Risk Rating (Entrenamiento)")
+
+# Calcular métricas para el modelo de 'performance_rating' en el conjunto de entrenamiento
+y_train_pred_performance = performance_model.predict(X_train_performance)
+print_metrics(y_train_performance, y_train_pred_performance, "Performance Rating (Entrenamiento)")
+
 # Calcular métricas para el modelo de 'risk_rating'
 y_pred_risk = risk_model.predict(X_test_risk)
 print_metrics(y_test_risk, y_pred_risk, "Risk Rating")

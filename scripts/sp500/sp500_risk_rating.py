@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
 
 sp500_data = pd.read_csv('../cleandata/sp500Weekly.csv')
 etf_data  = pd.read_csv('../cleandata/eu_etf_dataset_predict.csv')
@@ -22,11 +21,6 @@ X_train, X_test, y_train, y_test = train_test_split(X_etf, y_etf, test_size=0.2,
 model = RandomForestClassifier(random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
-
-accuracy = accuracy_score(y_test, y_pred)
-report = classification_report(y_test, y_pred)
-print("Model Accuracy:", accuracy)
-print("Classification Report:\n", report)
 
 sp500_data['Date'] = pd.to_datetime(sp500_data['Date'])  # Convertir la columna de fechas al formato datetime
 sp500_data.sort_values(by=['Symbol', 'Date'], inplace=True)  # Ordenar por símbolo y fecha

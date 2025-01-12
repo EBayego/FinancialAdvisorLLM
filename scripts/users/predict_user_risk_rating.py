@@ -26,14 +26,28 @@ X_scaled = scaler.fit_transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
-model = RandomForestClassifier(random_state=42)
+model = RandomForestClassifier(
+    random_state=42,
+    max_depth=7,
+    min_samples_split=10,    
+    min_samples_leaf=5,    
+    n_estimators=150,          
+    max_features='sqrt',        
+    class_weight='balanced'      
+)
 model.fit(X_train, y_train)
 
-# Evaluar el modelo
-y_pred = model.predict(X_test)
-print("Reporte de Clasificación:")
-print(classification_report(y_test, y_pred))
-print(f"Precisión del modelo: {accuracy_score(y_test, y_pred):.2f}")
+# Evaluar el modelo en el conjunto de prueba
+y_test_pred = model.predict(X_test)
+print("=== Métricas del conjunto de prueba ===")
+print(classification_report(y_test, y_test_pred))
+print(f"Precisión del modelo en prueba: {accuracy_score(y_test, y_test_pred):.2f}")
+
+# Evaluar el modelo en el conjunto de entrenamiento
+y_train_pred = model.predict(X_train)
+print("=== Métricas del conjunto de entrenamiento ===")
+print(classification_report(y_train, y_train_pred))
+print(f"Precisión del modelo en entrenamiento: {accuracy_score(y_train, y_train_pred):.2f}")
 
 # Guardar el modelo y los preprocesadores
 joblib.dump(model, "../models/user_risk_rating/modelo_perfil_riesgo.pkl")
