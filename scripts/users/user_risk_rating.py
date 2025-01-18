@@ -8,32 +8,32 @@ def obtener_datos_usuario():
     
     horizonte_inversion = input("Horizonte de inversión (corto/medio/largo plazo): ").lower()
     
-    print("Objetivos financieros: ")
+    print("\nObjetivos financieros: ")
     print("1. Preservación de capital")
     print("2. Generación de ingresos pasivos")
     print("3. Crecimiento del capital")
     objetivo_financiero = int(input("Selecciona una opción (1, 2 o 3): "))
     
-    print("¿Cómo describirías tu tolerancia al riesgo?")
+    print("\n¿Cómo describirías tu tolerancia al riesgo?")
     print("1. Me estreso fácilmente con pérdidas pequeñas.")
     print("2. Puedo tolerar fluctuaciones moderadas.")
     print("3. Me siento cómodo asumiendo riesgos grandes.")
     tolerancia_riesgo = int(input("Selecciona una opción (1, 2 o 3): "))
     
-    print("¿Cómo describirías tus ingresos?")
+    print("\n¿Cómo describirías tus ingresos?")
     print("1. Muy estables (empleo fijo o ingresos garantizados)")
     print("2. Moderadamente estables (freelance o ingresos variables bajos)")
     print("3. Altamente variables (empresario o ingresos inestables)")
     estabilidad_ingresos = int(input("Selecciona una opción (1, 2 o 3): "))
     
-    print("¿Cuál es tu nivel de conocimiento sobre inversiones y mercados financieros?")
+    print("\n¿Cuál es tu nivel de conocimiento sobre inversiones y mercados financieros?")
     print("1. No tengo conocimientos.")
     print("2. Tengo conocimientos básicos.")
     print("3. Estoy familiarizado y tengo algo de experiencia.")
     print("4. Tengo conocimientos avanzados y experiencia.")
     conocimiento_inversiones = int(input("Selecciona una opción (1, 2, 3 o 4): "))
 
-    colchon_seguridad = input("¿Tienes un colchón de seguridad equivalente a al menos 3-6 meses de gastos? (s/n): ").lower()
+    colchon_seguridad = input("\n¿Tienes un colchón de seguridad equivalente a al menos 3-6 meses de gastos? (s/n): ").lower()
     
     return {
         'edad': edad,
@@ -131,6 +131,6 @@ def calcular_perfil_riesgo(datos_usuario):
     
     return perfil_riesgo
 
-#datos_usuario = obtener_datos_usuario()
-#perfil_riesgo = calcular_perfil_riesgo(datos_usuario)
-#print(f"Perfil de riesgo calculado: {perfil_riesgo}")
+datos_usuario = obtener_datos_usuario()
+perfil_riesgo = calcular_perfil_riesgo(datos_usuario)
+print(f"\nPerfil de riesgo calculado: {perfil_riesgo}")
