@@ -28,12 +28,12 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, 
 
 model = RandomForestClassifier(
     random_state=42,
-    max_depth=7,
-    min_samples_split=10,    
-    min_samples_leaf=5,    
-    n_estimators=150,          
-    max_features='sqrt',        
-    class_weight='balanced'      
+    max_depth=7,                # Evita que los árboles sean demasiado profundos, reduciendo el riesgo de sobreajuste y mejorando la generalización.
+    min_samples_split=10,       # Especifica el número mínimo de muestras requeridas para dividir un nodo. Un valor más alto fuerza a los árboles a ser menos complejos, ayudando a prevenir el sobreajuste.
+    min_samples_leaf=5,         # Define el número mínimo de muestras necesarias en una hoja. Asegura que las hojas no sean demasiado pequeñas, ayudando a suavizar el modelo y mejora su capacidad de generalización.
+    n_estimators=150,           # Determina el número de árboles en el bosque. Más árboles generalmente mejoran la precisión, pero aumentan el tiempo de entrenamiento y predicción.
+    max_features='sqrt',        # Controla el número de características consideradas en cada división. Al usar la raíz cuadrada del número total de características, se introduce aleatoriedad en los árboles, reduciendo la correlación entre ellos y mejorando la robustez del modelo.
+    class_weight='balanced'     # Ajusta automáticamente los pesos de las clases según su frecuencia en los datos. Es útil para manejar desequilibrios en las clases, asegurando que las menos frecuentes sean consideradas en el entrenamiento.
 )
 model.fit(X_train, y_train)
 
