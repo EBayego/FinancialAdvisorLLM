@@ -1,26 +1,7 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
 
 sp500_data = pd.read_csv('../cleandata/sp500Weekly.csv')
 etf_data  = pd.read_csv('../cleandata/eu_etf_dataset_predict.csv')
-
-etf_features = etf_data[['fund_type', 'performance_rating', 'roe', 'fund_trailing_return_ytd',
-                         'long_term_projected_earnings_growth', 'historical_earnings_growth', 'risk_rating']].dropna()
-
-# Convertir 'fund_type' en variables dummy por ser categórico
-etf_features_encoded = pd.get_dummies(etf_features, columns=['fund_type'])
-
-# Separar variables predictoras y variable objetivo
-X_etf = etf_features_encoded.drop('risk_rating', axis=1)
-y_etf = etf_features_encoded['risk_rating'].astype('int')
-
-# Dividir datos en conjunto de entrenamiento y prueba
-X_train, X_test, y_train, y_test = train_test_split(X_etf, y_etf, test_size=0.2, random_state=42)
-
-model = RandomForestClassifier(random_state=42)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
 
 sp500_data['Date'] = pd.to_datetime(sp500_data['Date'])  # Convertir la columna de fechas al formato datetime
 sp500_data.sort_values(by=['Symbol', 'Date'], inplace=True)  # Ordenar por símbolo y fecha
